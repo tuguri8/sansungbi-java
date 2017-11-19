@@ -19,52 +19,52 @@ import javax.swing.JTextField;
 public class Gui extends JFrame{
 	Dimension dim = new Dimension(1000,500);
 	Dimension dim2 = new Dimension(200,20);
-	public JFrame frame = new JFrame("개발자타자연습");
-	public JLabel[] arrJ = new JLabel[5];
-	public JButton start;
-	public JTextField inputtext;
-	public HashMap<Integer, String> newHash = new HashMap<Integer, String>();
+	public JFrame frame = new JFrame("개발자타자연습"); //JFrame 정의
+	public JLabel[] arrJ = new JLabel[5]; //JLabel 배열 생성, 일단 데이터 5개 입력하므로 5개.
+	public JButton start; // JButton 정의
+	public JTextField inputtext; //JTextField 정의
+	public HashMap<Integer, String> newHash = new HashMap<Integer, String>(); //해쉬맵 정의, key를 정수타입, 들어갈 내용을 String타입으로 정의
 	
-	public int[] arr = new int[5];
+	public int[] arr = new int[5]; //정수 배열 정의, 랜덤함수 값을 담기 위함
 	Random random = new Random();
-	Record record1 = new Record();
+	Record record1 = new Record(); //스톱워치 클래스 생성
 	Gui(){
-		newHash.put(1, "일가천");
-		newHash.put(2, "이가천");
-		newHash.put(3, "삼가천");
-		newHash.put(4, "사가천");
-		newHash.put(5, "오가천");
+		newHash.put(1, "일가천"); //해쉬맵 데이터 삽입
+		newHash.put(2, "이가천"); //해쉬맵 데이터 삽입
+		newHash.put(3, "삼가천"); //해쉬맵 데이터 삽입
+		newHash.put(4, "사가천"); //해쉬맵 데이터 삽입
+		newHash.put(5, "오가천"); //해쉬맵 데이터 삽입
 		for(int i = 0;i<arr.length;i++){
-		arr[i] = random.nextInt(4)+1;
+		arr[i] = random.nextInt(4)+1; //정수 arr배열에 1~5의 랜덤값을 삽입
 		}
-		frame.setPreferredSize(dim);
-		ButtonListener listner = new ButtonListener();
+		frame.setPreferredSize(dim); //프레임을 dim크기로 정의
+		ButtonListener listner = new ButtonListener(); //버튼이벤트 클래스 생성
 		JPanel panel1 = new JPanel();
-		panel1.setLayout(new BoxLayout(panel1,BoxLayout.X_AXIS));
-		for(int i = 0; i<arrJ.length; i++){
-		arrJ[i] = new JLabel(newHash.get(arr[i]));
-		panel1.add(arrJ[i]);
+		panel1.setLayout(new BoxLayout(panel1,BoxLayout.X_AXIS));  //panel1에 정의된 레이블을 X축으로 박스레이아웃
+		for(int i = 0; i<arrJ.length; i++){ 
+		arrJ[i] = new JLabel(newHash.get(arr[i])); //JLabel을 차례대로 랜덥값이 삽입된 정수배열을 키값으로 하는 해쉬맵의 내용을 이름으로 정의 
+		panel1.add(arrJ[i]); 
 		}
 
 		
 		JPanel panel3 = new JPanel();
 		start = new JButton("입력");
 		inputtext = new JTextField(1);
-		start.addActionListener(listner);
+		start.addActionListener(listner); //버튼에 이벤트 추가
 		panel3.setPreferredSize(dim2);
-		panel3.setLayout(new BoxLayout(panel3,BoxLayout.X_AXIS));
+		panel3.setLayout(new BoxLayout(panel3,BoxLayout.X_AXIS)); //panel3에 X축 박스레이아웃 추가
 		panel3.add(inputtext, BorderLayout.WEST);
 		panel3.add(start, BorderLayout.EAST);
 		
 		JPanel panel4 = new JPanel();
 		panel4.add(panel1);
 		panel4.add(panel3);
-		panel4.setLayout(new BoxLayout(panel4,BoxLayout.Y_AXIS));
+		panel4.setLayout(new BoxLayout(panel4,BoxLayout.Y_AXIS)); //panel4에 패널1,3생성해서 Y축으로 박스레이아웃
 		
 		frame.add(panel4);
 		frame.pack();
 		frame.setVisible(true);
-		record1.run();
+		record1.run(); //스톱워치 시작
 	
 		
 		
@@ -76,14 +76,15 @@ public class Gui extends JFrame{
 			if(e.getSource() == start){
 				
 				for(int i = 0; i < 5; i++){
-				if(inputtext.getText().equals(newHash.get(arr[i])))
-					arrJ[i].setVisible(false);
+				if(inputtext.getText().equals(newHash.get(arr[i]))) //입력된 값이 해쉬맵의 어느 값과 일치하면  
+					arrJ[i].setVisible(false); // 그 JLabel을 안보이게 한다
 				}
 				if(arrJ[0].isVisible() == false && arrJ[1].isVisible() == false
 						&& arrJ[2].isVisible() == false && arrJ[3].isVisible() == false
-						&& arrJ[4].isVisible() == false){
-					record1.exit();
-					JOptionPane.showMessageDialog(start, "끝"  + "기록은 " +record1.timerBuffer, "끝", JOptionPane.INFORMATION_MESSAGE);
+						&& arrJ[4].isVisible() == false){ // 모든 JLabel이 보이지 않으면(즉, 완료되면)
+					record1.exit(); //스톱워치 종료
+					JOptionPane.showMessageDialog(start, "끝  "  + "기록은  : " +record1.timerBuffer, "끝", JOptionPane.INFORMATION_MESSAGE);
+					//메세지로 끝을 알리고, 기록을 출력한다
 				}
 				
 			}
