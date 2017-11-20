@@ -113,7 +113,7 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
 			if(inputtext.getText().equals(newHash.get(arr[i]))) //입력된 값이 해쉬맵의 어느 값과 일치하면  
 				arrJ[i].setVisible(false); // 그 JLabel을 안보이게 한다
 			}
-		inputtext.setText("");
+		inputtext.setText(""); //JLabel Visible False 후, TextLabel을 빈칸으로 두어서 바로 입력할수 있게 한다.
 	}
 	
 	public void endAnswer(){
@@ -126,7 +126,7 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
 			record1.exit(); //스톱워치 종료
 			JOptionPane.showMessageDialog(start, "기록  : " +record1.timerBuffer, "끝", JOptionPane.INFORMATION_MESSAGE);
 			//메세지로 끝을 알리고, 기록을 출력한다
-			System.exit(0);
+			System.exit(0);//프로그램종료
 		}
 	}
 	
