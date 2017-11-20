@@ -10,7 +10,6 @@ public class Record extends Thread{
 
   public void run(){
 	  stopwatch(1);
-	  System.out.println("Timer ON! 엔터 키를 누르면 종료합니다");
   }
   
   public void exit(){
