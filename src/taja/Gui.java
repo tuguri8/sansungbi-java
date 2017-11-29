@@ -1,47 +1,45 @@
 package taja;
 
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Gui extends JFrame implements ActionListener, KeyListener {
-	private Dimension dim = new Dimension(400, 200);
-	private GridLayout firstGrid = new GridLayout(3, 3); // 3x3 그리드레이아웃 정의
-	private GridLayout secondGrid = new GridLayout(1, 2); // 1x2 그리드레이아웃 정의
-	private JFrame frame = new JFrame("개발자타자연습"); // JFrame 정의
-	public JLabel[] arrJ = new JLabel[9]; // JLabel 배열 생성, 일단 데이터 5개 입력하므로 5개.
-	public JButton start; // JButton 정의
-	public JTextField inputtext; // JTextField 정의
-	public HashMap<Integer, String> wordData = new HashMap<Integer, String>(); // 해쉬맵
-																				// 정의,
-																				// key를
-																				// 정수타입,
-																				// 들어갈
-																				// 내용을
-																				// String타입으로
-																				// 정의
-
+public class Gui extends JPanel implements ActionListener, KeyListener {
+	private Dimension dim = new Dimension(400, 400);
+	public JLabel[] arrJlabel = new JLabel[9]; /*
+												 * JLabel 배열 생성, 일단 데이터 5개 입력하므로
+												 * 5개.
+												 */
+	public JButton inputButton; // JButton 정의
+	public JButton startButton;
+	public JTextField inputText; // JTextField 정의
+	public HashMap<Integer, String> wordData = new HashMap<Integer, String>();
+	// 해쉬맵 정의,key를 정수타입,들어갈 내용을 String타입으로 정의
 	public List<Integer> arr = new ArrayList<>(); // 어레이리스트 arr 정의
-
-	Record record1 = new Record(); // 스톱워치 클래스 생성
-
+	Random myRandom = new Random();
+	totalPlayTime total_play_time = new totalPlayTime();
+	public int tryCount = 0;
+	public int correctCount = 0;
+	
 	public Gui() {
+
 		wordData.put(1, "일가천"); // 해쉬맵 데이터 삽입
 		wordData.put(2, "이가천"); // 해쉬맵 데이터 삽입
 		wordData.put(3, "삼가천"); // 해쉬맵 데이터 삽입
@@ -60,47 +58,46 @@ public class Gui extends JFrame implements ActionListener, KeyListener {
 		}
 
 		Collections.shuffle(arr); // 어레이리스트 값들을 셔플함.
-
-		JPanel panel1 = new JPanel();
-		panel1.setLayout(firstGrid); // panel1에 정의된 레이블을 3x3그리드레이아웃으로 설정.
-		for (int i = 0; i < arrJ.length; i++) {
-			arrJ[i] = new JLabel(wordData.get(arr.get(i))); // JLabel을 차례대로 랜덥값이
-															// 삽입된 어레이리스트 키값으로
-															// 하는
-															// 해쉬맵의 내용을 이름으로 정의
-			panel1.add(arrJ[i]);
+		//JPanel myPanel = new JPanel();
+		setLayout(null); // myPanel에 정의된 레이블을 3x3그리드레이아웃으로 설정.
+		
+		for (int i = 0; i < arrJlabel.length; i++) {
+			arrJlabel[i] = new JLabel(
+					wordData.get(arr.get(i))); /*
+												 * JLabel을 차례대로 랜덥값이 삽입된 어레이리스트
+												 * 키값으로 하는 해쉬맵의 내용을 이름으로 정의
+												 */
+			arrJlabel[i].setBounds(myRandom.nextInt(350), myRandom.nextInt(150) + 50 , 60, 50);
+			add(arrJlabel[i]);
 		}
-
-		JPanel panel3 = new JPanel();
-		start = new JButton("입력");
-		inputtext = new JTextField(1);
-		inputtext.addKeyListener(this); // 텍스트필드에 키 이벤트 추가(엔터)
-		start.addActionListener(this);// 버튼에 이벤트 추가
-		panel3.setLayout(secondGrid); // panel3에 1x2 그리드레이아웃 설정
-		panel3.add(inputtext);
-		panel3.add(start);
-
-		JPanel panel4 = new JPanel();
-		panel4.add(panel1);
-		panel4.add(panel3);
-		panel4.setLayout(new BoxLayout(panel4, BoxLayout.Y_AXIS)); // panel4에
-																	// 패널1,3생성해서
-																	// Y축으로
-																	// 박스레이아웃
-
-		frame.add(panel4);
-		frame.setPreferredSize(dim); // 프레임을 dim크기로 정의
-		frame.pack();
-		frame.setVisible(true);
-		record1.run(); // 스톱워치 시작
+		
+		startButton = new JButton("시작하기");
+		startButton.addActionListener(this);
+		startButton.setBounds(200, 200, 80, 80);
+		add(startButton);
+		total_play_time.playTime.setBounds(170, 0, 50, 20);
+		add(total_play_time.playTime);
+		inputButton = new JButton("입력");
+		inputText = new JTextField(10);
+		inputText.addKeyListener(this); // 텍스트필드에 키 이벤트 추가(엔터)
+		inputButton.addActionListener(this);// 버튼에 이벤트 추가
+		inputButton.setBounds(305, 290, 70, 49);
+		inputText.setBounds(0, 290, 300, 50);
+		add(inputButton);
+		add(inputText);
+		stop();
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) { // 버튼이벤트 정의
-		if (e.getSource() == start) { // 버튼이 눌리면
+		if (e.getSource() == inputButton) { // 버튼이 눌리면
+
 			removeAnswer();
 			endAnswer();
+
+		} else if (e.getSource() == startButton) {
+			start();
 
 		}
 	}
@@ -109,6 +106,7 @@ public class Gui extends JFrame implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) { // 키이벤트 정의
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == 10) // 엔터가 눌리면
+			tryCount++;
 			removeAnswer();
 		endAnswer();
 	}
@@ -126,30 +124,52 @@ public class Gui extends JFrame implements ActionListener, KeyListener {
 
 	public void removeAnswer() { // 정답처리 메소드
 		for (int i = 0; i < 9; i++) {
-			if (inputtext.getText().equals(wordData.get(arr.get(i)))) // 입력된 값이
-																		// 해쉬맵의
-																		// 어느 값과
-																		// 일치하면
-				arrJ[i].setVisible(false); // 그 JLabel을 안보이게 한다
+			if (inputText.getText().equals(
+					wordData.get(arr.get(i)))) /* 입력된 값이 해쉬맵의 어느 값과 일치하면 */
+				arrJlabel[i].setVisible(false); // 그 JLabel을 안보이게 한다
 		}
-		inputtext.setText(""); // JLabel Visible False 후, TextLabel을 빈칸으로 두어서 바로
-								// 입력할수 있게 한다.
+		correctCount++;
+		inputText.setText(""); /*
+								 * JLabel Visible False 후, TextLabel을 빈칸으로 두어서 바로
+								 * 입력할수 있게 한다.
+								 */
+		
 	}
 
 	public void endAnswer() { // 게임 끝 메소드
-		if (arrJ[0].isVisible() == false && arrJ[1].isVisible() == false && arrJ[2].isVisible() == false
-				&& arrJ[3].isVisible() == false && arrJ[4].isVisible() == false && arrJ[5].isVisible() == false
-				&& arrJ[6].isVisible() == false && arrJ[7].isVisible() == false && arrJ[8].isVisible() == false) { // 모든
-																													// JLabel이
-																													// 보이지
-																													// 않으면(즉,
-																													// 완료되면)
-			record1.exit(); // 스톱워치 종료
-			JOptionPane.showMessageDialog(start, "기록  : " + record1.timerBuffer, "끝", JOptionPane.INFORMATION_MESSAGE);
+		if (arrJlabel[0].isVisible() == false && arrJlabel[1].isVisible() == false && arrJlabel[2].isVisible() == false
+				&& arrJlabel[3].isVisible() == false && arrJlabel[4].isVisible() == false
+				&& arrJlabel[5].isVisible() == false && arrJlabel[6].isVisible() == false
+				&& arrJlabel[7].isVisible() == false && arrJlabel[8].isVisible() == false) { // 모든
+			/* JLabel이 보이지 않으면(즉,완료되면) */
+			total_play_time.stop();
+			JOptionPane.showMessageDialog(inputButton, "기록  : " + total_play_time.gamePlayTime + "명중률 : " + (correctCount % tryCount), "끝",
+					JOptionPane.INFORMATION_MESSAGE);
 			// 메세지로 끝을 알리고, 기록을 출력한다
+			// getContentPane().removeAll();
 			System.exit(0);// 프로그램종료
 
 		}
 	}
 
+	public void start() {
+		total_play_time.playTime.setVisible(true);
+		total_play_time.start();
+		for (int i = 0; i < 9; i++) {
+			arrJlabel[i].setVisible(true);
+		}
+		inputButton.setVisible(true);
+		inputText.setVisible(true);
+		startButton.setVisible(false);
+
+	}
+
+	public void stop() {
+		for (int i = 0; i < 9; i++) {
+			arrJlabel[i].setVisible(false);
+		}
+		inputButton.setVisible(false);
+		inputText.setVisible(false);
+		total_play_time.playTime.setVisible(false);
+	}
 }
