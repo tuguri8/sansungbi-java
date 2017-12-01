@@ -10,11 +10,11 @@ public class Main extends JFrame{
 		// TODO Auto-generated method stub
 		
 		JFrame myFrame = new JFrame();
-		Dimension dim = new Dimension(400, 400);
 		myFrame.add(new Gui());
-		myFrame.setPreferredSize(dim); // 프레임을 dim크기로 정의
-		myFrame.pack();
+		myFrame.setSize(400, 400);
+		//myFrame.setPreferredSize(dim); // 프레임을 dim크기로 정의
 		myFrame.setVisible(true);
+		
 	}
 	
 
