@@ -11,7 +11,7 @@ public class Main extends JFrame{
 		
 		JFrame myFrame = new JFrame();
 		myFrame.add(new Gui());
-		myFrame.setSize(400, 400);
+		myFrame.setSize(800, 600);
 		//myFrame.setPreferredSize(dim); // 프레임을 dim크기로 정의
 		myFrame.setVisible(true);
 		

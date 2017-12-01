@@ -1,5 +1,7 @@
 package taja;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +37,9 @@ public class Gui extends JPanel implements ActionListener, KeyListener {
 	public float correctCount = 0; //맞은 회수 정수
 	public int correctPercent; //명중률 변수
 	private ImageIcon icon; 
-
-	
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 600;
+	Dimension dim = new Dimension(800,600);
 	
 	public Gui() {
 		icon = new ImageIcon("img/background.jpg");
@@ -58,8 +61,8 @@ public class Gui extends JPanel implements ActionListener, KeyListener {
 		}
 
 		Collections.shuffle(arr); // 어레이리스트 값들을 셔플함.
-		//JPanel myPanel = new JPanel();
-		setLayout(null); // myPanel에 정의된 레이블을 3x3그리드레이아웃으로 설정.
+		setLayout(null);
+		
 		
 		for (int i = 0; i < arrJlabel.length; i++) {
 			arrJlabel[i] = new JLabel(
@@ -67,26 +70,28 @@ public class Gui extends JPanel implements ActionListener, KeyListener {
 												 * JLabel을 차례대로 랜덥값이 삽입된 어레이리스트
 												 * 키값으로 하는 해쉬맵의 내용을 이름으로 정의
 												 */
-			arrJlabel[i].setBounds(myRandom.nextInt(350), myRandom.nextInt(40) + 30 , 60, 50);
+			arrJlabel[i].setBounds(myRandom.nextInt(750), myRandom.nextInt(80) + 30 , 120, 50);
+			arrJlabel[i].setFont(new Font("맑은 고딕",Font.BOLD,20));
 			add(arrJlabel[i]);
 		}
 		
 		startButton = new JButton("    ");
 		startButton.addActionListener(this);
-		startButton.setBounds(150, 250, 95, 30);
+		startButton.setBounds(330, 370, 150, 50);
 		add(startButton);
 		startButton.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		startButton.setBorderPainted(false);
 		startButton.setFocusPainted(false);
 		startButton.setContentAreaFilled(false);
-		total_play_time.playTime.setBounds(190, 0, 50, 50);
+		total_play_time.playTime.setBounds(390, 0, 200, 50);
+		total_play_time.playTime.setFont(new Font("Dialog",Font.ITALIC,40));
 		add(total_play_time.playTime);
 		inputButton = new JButton("입력");
 		inputText = new JTextField(10);
 		inputText.addKeyListener(this); // 텍스트필드에 키 이벤트 추가(엔터)
 		inputButton.addActionListener(this);// 버튼에 이벤트 추가
-		inputButton.setBounds(305, 290, 70, 49);
-		inputText.setBounds(0, 290, 300, 50);
+		inputButton.setBounds(710, 490, 68, 55);
+		inputText.setBounds(0, 490, 710, 58);
 		add(inputButton);
 		add(inputText);
 		stop();
